@@ -47,3 +47,30 @@ app.post("/habits", async (req, res) => {
     res.status(500).json({ error: "Network error" });
   }
 });
+
+app.get("/habits", async (req, res) => {
+  try {
+    const habits = await Habit.find();
+    res.status(200).json(habits);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put("/habits/:habitId", async (req, res) => {
+  const { habitId } = req.params;
+  const updateOnCompletion = req.body.completed;
+  try {
+    const habitToBeUpdated = await Habit.findByIdAndUpdate(
+      habitId,
+      { completed: updateOnCompletion },
+      { new: true }
+    );
+    if (!habitToBeUpdated) {
+      res.status(404).json({ error: "Habit not found" });
+    }
+    res.status(200).json(habitToBeUpdated);
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+});
