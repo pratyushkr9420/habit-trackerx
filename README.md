@@ -71,6 +71,12 @@ npm start
 
 ## Acknowledgments
 
+Huge thanks to the following icon libraries for their invaluable contributions to the visual appeal of our app:
+
+- [Feather](https://feathericons.com/): A beautiful set of icons, designed for simplicity and flexibility.
+- [Ionicons](https://ionicons.com/): A high-quality collection of premium icons for use across various platforms, developed by the Ionic Framework team.
+- [Ant Design Icons](https://ant.design/components/icon/): A comprehensive set of icons designed for use with the Ant Design framework.
+- [Entypo](http://www.entypo.com/): A collection of 411 carefully crafted pictograms, available as an open-source font.
 - [FontAwesome](https://fontawesome.com/) for icons
 
 ## Contact
