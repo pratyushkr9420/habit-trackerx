@@ -1,6 +1,16 @@
 
 # Project Name: habit-trackerx
 
+## Screenshots
+<p float="left">
+  <img src="https://github.com/pratyushkr9420/habit-trackerx/blob/main/screenshots/IMG_0972.PNG" width="300" height="600" alt="Screenshot 1">
+  <img src="https://github.com/pratyushkr9420/habit-trackerx/blob/main/screenshots/IMG_0973.PNG" width="300" height="600" alt="Screenshot 2">
+  <img src="https://github.com/pratyushkr9420/habit-trackerx/blob/main/screenshots/IMG_0974.PNG" width="300" height="600" alt="Screenshot 3">
+  <img src="https://github.com/pratyushkr9420/habit-trackerx/blob/main/screenshots/IMG_0975.PNG" width="300" height="600" alt="Screenshot 4">
+</p>
+
+
+
 ## Description
 
 Habit-Trackerx is a mobile app designed to empower you on your journey to build and maintain positive habits. With a user-friendly interface and robust tracking capabilities, Habit TrackerX makes it effortless to establish routines that contribute to your overall well-being and personal growth.
