@@ -9,11 +9,17 @@ import {
   TouchableWithoutFeedback,
   Alert,
 } from "react-native";
-import { Feather, Ionicons, AntDesign, FontAwesome } from "@expo/vector-icons";
+import {
+  Feather,
+  Ionicons,
+  AntDesign,
+  FontAwesome,
+  Entypo,
+} from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 const index = () => {
   const [option, setOption] = useState("Today");
@@ -21,7 +27,7 @@ const index = () => {
   const [selectedHabit, setSelectedHabit] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
-  const days = ["M", "T", "W", "T", "F", "S", "S"];
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -32,6 +38,7 @@ const index = () => {
     "Saturday",
   ];
   const currentDay = days[new Date().getDay()];
+  console.log(new Date().getDay());
   const fetchHabits = async () => {
     try {
       const response = await axios.get(
@@ -76,10 +83,45 @@ const index = () => {
     return !habit.completed || !habit.completed[currentDay];
   });
 
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://${process.env.REACT_APP_ADDRESS}:3000/habits/${selectedHabit._id}`
+      );
+      if (response.status === 200) {
+        Alert.alert(
+          `The habit titled ${selectedHabit.title} deleted successfully`
+        );
+      }
+      fetchHabits();
+    } catch (error) {
+      console.log("Error deleting the habit", error);
+    }
+  };
+
+  const getCompletedDays = (habitObject) => {
+    let completedDays = [];
+    if (habitObject && typeof habitObject === "object") {
+      for (let day in habitObject) {
+        if (habitObject[day]) {
+          completedDays.push(day);
+        }
+      }
+    }
+    return completedDays;
+  };
+
   console.log(habits);
   useEffect(() => {
     fetchHabits();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchHabits();
+    }, [])
+  );
+
   return (
     <>
       <ScrollView style={styles.homeContainer}>
@@ -243,6 +285,45 @@ const index = () => {
             ))}
           </View>
         )}
+        {option === "Overall" && (
+          <View>
+            {habits.map((habit, index) => (
+              <Pressable
+                key={index}
+                style={{
+                  backgroundColor: habit.color,
+                  marginTop: 50,
+                  borderRadius: 20,
+                  padding: 15,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.habitText}>{habit.title}</Text>
+                  <Text style={styles.habitText}>{habit.repeatMode}</Text>
+                </View>
+                <View
+                  style={{
+                    marginTop: 20,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.habitText2}>Completed On</Text>
+                  <Text style={styles.habitText2}>
+                    {getCompletedDays(habit.completed).join()}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        )}
       </ScrollView>
       <Modal
         visible={modalVisible}
@@ -276,15 +357,21 @@ const index = () => {
             </Pressable>
           </View>
           <View style={{ marginTop: 20, marginLeft: 20 }}>
-            <Pressable style={{ flexDirection: "row", gap: 10 }}>
-              <Feather name="edit-2" size={26} color="black" />
-              <Text style={{ fontSize: 18 }}>Edit</Text>
+            <Pressable
+              style={{ flexDirection: "row", gap: 10 }}
+              onPress={handleDelete}
+            >
+              <AntDesign name="delete" size={26} color="black" />
+              <Text style={{ fontSize: 18 }}>Delete</Text>
             </Pressable>
           </View>
           <View style={{ marginTop: 20, marginLeft: 20 }}>
-            <Pressable style={{ flexDirection: "row", gap: 10 }}>
-              <AntDesign name="delete" size={26} color="black" />
-              <Text style={{ fontSize: 18 }}>Delete</Text>
+            <Pressable
+              style={{ flexDirection: "row", gap: 10 }}
+              onPress={() => setModalVisible(false)}
+            >
+              <Entypo name="circle-with-cross" size={26} color="black" />
+              <Text style={{ fontSize: 18 }}>Close Modal</Text>
             </Pressable>
           </View>
         </View>
@@ -327,5 +414,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     textAlign: "center",
+  },
+  habitText2: {
+    fontWeight: "bold",
+    color: "white",
+    fontSize: 16,
   },
 });
