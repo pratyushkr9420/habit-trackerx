@@ -57,20 +57,23 @@ app.get("/habits", async (req, res) => {
   }
 });
 
-app.put("/habits/:habitId", async (req, res) => {
-  const { habitId } = req.params;
-  const updateOnCompletion = req.body.completed;
+app.put("/habits/:habitId/completed", async (req, res) => {
+  const habitId = req.params.habitId;
+  const updatedCompletion = req.body.completed; // The updated completion object
+
   try {
-    const habitToBeUpdated = await Habit.findByIdAndUpdate(
+    const updatedHabit = await Habit.findByIdAndUpdate(
       habitId,
-      { completed: updateOnCompletion },
+      { completed: updatedCompletion },
       { new: true }
     );
-    if (!habitToBeUpdated) {
-      res.status(404).json({ error: "Habit not found" });
+
+    if (!updatedHabit) {
+      return res.status(404).json({ error: "Habit not found" });
     }
-    res.status(200).json(habitToBeUpdated);
+
+    return res.status(200).json(updatedHabit);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 });
