@@ -51,8 +51,6 @@ npm install
 
 ## Usage
 
-Explain how users can use your mobile app. Include any configuration settings, environment variables, or additional setup required.
-
 ```bash
 # Run the app
 npm start
